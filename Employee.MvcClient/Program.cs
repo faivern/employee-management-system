@@ -7,13 +7,14 @@ namespace Employee.MvcClient
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            var baseUrl = builder.Configuration["ApiSettings:BaseUrl"];
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddHttpClient<EmployeeApiService>(client =>
             {
-                client.BaseAddress = new Uri("https://localhost:7134/");
+                client.BaseAddress = new Uri(baseUrl);
             });
 
             var app = builder.Build();
@@ -38,7 +39,7 @@ namespace Employee.MvcClient
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=employees}/{action=Index}/{id?}");
 
             app.Run();
         }

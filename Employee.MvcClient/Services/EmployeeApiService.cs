@@ -14,7 +14,15 @@ namespace Employee.MvcClient.Services
 
         public async Task<List<Employee.MvcClient.Models.Employee>> GetAllAsync()
         {
-            var employees = await _httpClient.GetFromJsonAsync<List<Employee.MvcClient.Models.Employee>>("api/Employees");
+            var response = await _httpClient.GetAsync("api/Employees");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                // logga, visa tom lista, kasta eget fel, etc
+                return new List<Employee.MvcClient.Models.Employee>();
+            }
+
+            var employees = await response.Content.ReadFromJsonAsync<List<Employee.MvcClient.Models.Employee>>();
             return employees ?? new List<Employee.MvcClient.Models.Employee>();
         }
 
