@@ -1,3 +1,5 @@
+using Employee.MvcClient.Services;
+
 namespace Employee.MvcClient
 {
     public class Program
@@ -8,6 +10,11 @@ namespace Employee.MvcClient
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddHttpClient<EmployeeApiService>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7134/");
+            });
 
             var app = builder.Build();
 

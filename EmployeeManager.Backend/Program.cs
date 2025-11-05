@@ -13,7 +13,7 @@ namespace EmployeeManager.Backend
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddDbContext<EmployeeManagerContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("EmployeeManagerContext")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("EmployeeManagerDb")));
 
             var app = builder.Build();
 
