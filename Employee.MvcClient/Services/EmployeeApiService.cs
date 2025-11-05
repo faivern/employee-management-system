@@ -7,53 +7,44 @@ namespace Employee.MvcClient.Services
     public class EmployeeApiService
     {
         private readonly HttpClient _httpClient;
-        public EmployeeApiService(HttpClient httpClient)
+        private readonly ILogger<EmployeeApiService> _logger;
+
+        public EmployeeApiService(HttpClient httpClient, ILogger<EmployeeApiService> logger)
         {
             _httpClient = httpClient;
+            _logger = logger;
         }
 
         public async Task<List<Employee.MvcClient.Models.Employee>> GetAllAsync()
         {
-            var response = await _httpClient.GetAsync("api/Employees");
-
-            if (!response.IsSuccessStatusCode)
+            try
             {
-                // logga, visa tom lista, kasta eget fel, etc
+                _logger.LogInformation("Fetching all employees from API: {BaseAddress}api/Employees", _httpClient.BaseAddress);
+
+                var response = await _httpClient.GetAsync("api/Employees");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    _logger.LogError("Failed to fetch employees. Status: {StatusCode}, Error: {Error}",
+                        response.StatusCode, errorContent);
+                    return new List<Employee.MvcClient.Models.Employee>();
+                }
+
+                var employees = await response.Content.ReadFromJsonAsync<List<Employee.MvcClient.Models.Employee>>();
+                _logger.LogInformation("Successfully fetched {Count} employees", employees?.Count ?? 0);
+                return employees ?? new List<Employee.MvcClient.Models.Employee>();
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "HTTP request exception when fetching employees");
                 return new List<Employee.MvcClient.Models.Employee>();
             }
-
-            var employees = await response.Content.ReadFromJsonAsync<List<Employee.MvcClient.Models.Employee>>();
-            return employees ?? new List<Employee.MvcClient.Models.Employee>();
-        }
-
-        public async Task<Employee.MvcClient.Models.Employee?> GetByIdAsync(int id)
-        {
-            var response = await _httpClient.GetAsync($"api/Employees/{id}");
-            
-            if (!response.IsSuccessStatusCode)
+            catch (Exception ex)
             {
-                return null;
+                _logger.LogError(ex, "Unexpected error when fetching employees");
+                return new List<Employee.MvcClient.Models.Employee>();
             }
-
-            return await response.Content.ReadFromJsonAsync<Employee.MvcClient.Models.Employee>();
-        }
-
-        public async Task<bool> CreateAsync(Employee.MvcClient.Models.Employee employee)
-        {
-            var response = await _httpClient.PostAsJsonAsync("api/Employees", employee);
-            return response.IsSuccessStatusCode;
-        }
-
-        public async Task<bool> UpdateAsync(int id, Employee.MvcClient.Models.Employee employee)
-        {
-            var response = await _httpClient.PutAsJsonAsync($"api/Employees/{id}", employee);
-            return response.IsSuccessStatusCode;
-        }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            var response = await _httpClient.DeleteAsync($"api/Employees/{id}");
-            return response.IsSuccessStatusCode;
         }
 
     }

@@ -11,6 +11,18 @@ namespace EmployeeManager.Backend
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddControllers();
+
+            // Add CORS policy
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowMvcClient", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+            });
 
             builder.Services.AddDbContext<EmployeeManagerContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("EmployeeManagerDb")));
@@ -30,7 +42,13 @@ namespace EmployeeManager.Backend
 
             app.UseRouting();
 
+            // Enable CORS
+            app.UseCors("AllowMvcClient");
+
             app.UseAuthorization();
+
+            // Map API controllers
+            app.MapControllers();
 
             app.MapControllerRoute(
                 name: "default",

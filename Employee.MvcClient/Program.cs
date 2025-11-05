@@ -7,7 +7,7 @@ namespace Employee.MvcClient
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            var baseUrl = builder.Configuration["ApiSettings:BaseUrl"];
+            var baseUrl = builder.Configuration["ApiSettings:BaseUrl"] ?? "https://localhost:7224/";
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -15,6 +15,7 @@ namespace Employee.MvcClient
             builder.Services.AddHttpClient<EmployeeApiService>(client =>
             {
                 client.BaseAddress = new Uri(baseUrl);
+                client.Timeout = TimeSpan.FromSeconds(30);
             });
 
             var app = builder.Build();
