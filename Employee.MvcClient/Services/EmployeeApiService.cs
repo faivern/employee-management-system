@@ -26,5 +26,35 @@ namespace Employee.MvcClient.Services
             return employees ?? new List<Employee.MvcClient.Models.Employee>();
         }
 
+        public async Task<Employee.MvcClient.Models.Employee?> GetByIdAsync(int id)
+        {
+            var response = await _httpClient.GetAsync($"api/Employees/{id}");
+            
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            return await response.Content.ReadFromJsonAsync<Employee.MvcClient.Models.Employee>();
+        }
+
+        public async Task<bool> CreateAsync(Employee.MvcClient.Models.Employee employee)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/Employees", employee);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> UpdateAsync(int id, Employee.MvcClient.Models.Employee employee)
+        {
+            var response = await _httpClient.PutAsJsonAsync($"api/Employees/{id}", employee);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var response = await _httpClient.DeleteAsync($"api/Employees/{id}");
+            return response.IsSuccessStatusCode;
+        }
+
     }
 }
