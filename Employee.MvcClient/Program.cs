@@ -19,6 +19,9 @@ namespace Employee.MvcClient
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
+
+
+            // sds
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
