@@ -7,23 +7,53 @@ namespace Employee.MvcClient.Controllers
     public class EmployeesController : Controller
     {
         private readonly EmployeeApiService _employeeApiService;
-        private readonly ILogger<EmployeesController> _logger;
 
-        public EmployeesController(EmployeeApiService employeeApiService, ILogger<EmployeesController> logger)
+        public EmployeesController(EmployeeApiService employeeApiService)
         {
             _employeeApiService = employeeApiService;
-            _logger = logger;
         }
 
         // GET: Employees
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? searchId)
         {
-            _logger.LogInformation("Loading employee index page");
+            if (searchId.HasValue)
+            {
+                var employee = await _employeeApiService.GetByIdAsync(searchId.Value);
+                if (employee != null)
+                {
+                    return View(new List<Employee.MvcClient.Models.Employee> { employee });
+                }
+
+                return View(new List<Employee.MvcClient.Models.Employee>());
+
+            }
+
             var employees = await _employeeApiService.GetAllAsync();
-            _logger.LogInformation("Retrieved {Count} employees", employees?.Count ?? 0);
             return View(employees);
+            
         }
 
+        // GET: Employees/Create
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
 
-    }
+        // POST: Employees/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(IFormCollection collection)
+        {
+            try
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+
+            }
+}
+        }
 }
