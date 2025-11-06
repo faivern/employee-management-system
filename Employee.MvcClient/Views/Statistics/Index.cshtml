@@ -62,7 +62,8 @@
 				<th>Location</th>
 				<th>Employees</th>
 				<th>Average Salary</th>
-				<th>Total Salary Cost</th>
+				<th>Total Salary Cost (Monthly)</th>
+				<th>Total Salary Cost (Yearly)</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -79,13 +80,16 @@
 					<td>
 						<strong class="text-success">@(((decimal)dept.TotalSalaryCost).ToString("C"))</strong>
 					</td>
+					<td>
+						<strong class="text-success">@(((decimal)dept.TotalSalaryCost * 12).ToString("C"))</strong>
+					</td>
 				</tr>
 			}
 		</tbody>
 	</table>
 </div>
 
-<h3 class="mt-4">Top Earners</h3>
+<h3 class="mt-4">Top Earners (5)</h3>
 <div class="table-responsive">
 	<table class="table table-striped table-hover">
 		<thead class="table-dark">
