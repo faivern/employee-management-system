@@ -27,8 +27,6 @@ namespace Employee.MvcClient.Services
         }
 
 
-
-
         // GET: api/Employees/{id}
         public async Task<Employee.MvcClient.Models.Employee?> GetByIdAsync(int EmployeeId)
         {
@@ -45,6 +43,7 @@ namespace Employee.MvcClient.Services
             return employee;
         }
 
+
         // POST: api/Employees
         public async Task<bool> CreateAsync(Employee.MvcClient.Models.Employee employee)
         {
@@ -55,6 +54,7 @@ namespace Employee.MvcClient.Services
             return response.IsSuccessStatusCode;
         }
 
+
         // Edit: api/Employees/{id}
         public async Task<bool> UpdateAsync(int EmployeeId, Employee.MvcClient.Models.Employee employee)
         {
@@ -64,6 +64,7 @@ namespace Employee.MvcClient.Services
             }
             return response.IsSuccessStatusCode;
         }
+
 
         // DELETE: api/Employees/{id}
         public async Task<bool> DeleteAsync(int EmployeeId)

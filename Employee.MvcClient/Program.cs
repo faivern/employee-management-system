@@ -18,12 +18,15 @@ namespace Employee.MvcClient
                 client.Timeout = TimeSpan.FromSeconds(30);
             });
 
+            builder.Services.AddHttpClient<DepartmentApiService>(client =>
+            {
+                client.BaseAddress = new Uri(baseUrl);
+                client.Timeout = TimeSpan.FromSeconds(30);
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-
-
-            // sds
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");

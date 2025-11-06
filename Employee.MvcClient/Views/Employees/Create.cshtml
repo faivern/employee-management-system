@@ -6,50 +6,71 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1>Add new Employee</h1>
     <div>
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+  <a asp-action="Index" class="btn btn-secondary">Back to Management</a>
     </div>
 </div>
 
 <div class="container">
     <div class="row justify-content-center">
    <div class="col-md-8">
-            <div class="card">
+   <div class="card">
   <div class="card-body">
        <form asp-action="Create" method="post">
      <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
    
          <div class="mb-3">
-              <label asp-for="FirstName" class="form-label"></label>
+    <label asp-for="FirstName" class="form-label"></label>
          <input asp-for="FirstName" class="form-control" placeholder="Enter first name" />
-                 <span asp-validation-for="FirstName" class="text-danger"></span>
-        </div>
+           <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
 
     <div class="mb-3">
-      <label asp-for="LastName" class="form-label"></label>
-             <input asp-for="LastName" class="form-control" placeholder="Enter last name" />
+   <label asp-for="LastName" class="form-label"></label>
+   <input asp-for="LastName" class="form-control" placeholder="Enter last name" />
          <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
+      </div>
 
-      <div class="mb-3">
+ <div class="mb-3">
      <label asp-for="Email" class="form-label"></label>
        <input asp-for="Email" class="form-control" placeholder="Enter email address" />
-             <span asp-validation-for="Email" class="text-danger"></span>
+           <span asp-validation-for="Email" class="text-danger"></span>
           </div>
 
         <div class="mb-3">
  <label asp-for="Salary" class="form-label"></label>
     <input asp-for="Salary" class="form-control" placeholder="Enter salary (1-200,000)" />
-  <span asp-validation-for="Salary" class="text-danger"></span>
+<span asp-validation-for="Salary" class="text-danger"></span>
        </div>
 
             <div class="mb-3">
-   <label asp-for="DepartmentId" class="form-label"></label>
-        <input asp-for="DepartmentId" class="form-control" placeholder="Enter department ID" />
+   <label asp-for="DepartmentId" class="form-label">Department</label>
+        <select asp-for="DepartmentId" class="form-select" id="departmentSelect">
+      <option value="">-- Select a Department --</option>
+        @if (ViewBag.Departments != null)
+      {
+    foreach (var dept in ViewBag.Departments)
+{
+        <option value="@dept.DepartmentId" data-name="@dept.Name" data-location="@dept.Location">
+       @dept.DepartmentId - @dept.Name (@dept.Location)
+     </option>
+     }
+          }
+        </select>
  <span asp-validation-for="DepartmentId" class="text-danger"></span>
           </div>
 
-         <div class="d-flex gap-2">
-              <button type="submit" class="btn btn-success">Create Employee</button>
+    <div class="mb-3" id="departmentInfo" style="display: none;">
+                <div class="card bg-light">
+             <div class="card-body">
+     <h6 class="card-title">Selected Department Details</h6>
+     <p class="mb-1"><strong>Name:</strong> <span id="deptName"></span></p>
+       <p class="mb-0"><strong>Location:</strong> <span id="deptLocation"></span></p>
+      </div>
+       </div>
+     </div>
+
+      <div class="d-flex gap-2">
+           <button type="submit" class="btn btn-success">Create Employee</button>
   <a asp-action="Index" class="btn btn-secondary">Cancel</a>
       </div>
     </form>
@@ -61,5 +82,23 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        document.getElementById('departmentSelect').addEventListener('change', function() {
+     var selectedOption = this.options[this.selectedIndex];
+        var deptInfo = document.getElementById('departmentInfo');
+            
+            if (this.value) {
+       var deptName = selectedOption.getAttribute('data-name');
+    var deptLocation = selectedOption.getAttribute('data-location');
+         
+           document.getElementById('deptName').textContent = deptName;
+                document.getElementById('deptLocation').textContent = deptLocation || 'N/A';
+         deptInfo.style.display = 'block';
+            } else {
+     deptInfo.style.display = 'none';
+            }
+        });
+    </script>
 }
 

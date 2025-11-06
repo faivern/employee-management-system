@@ -19,6 +19,8 @@ namespace Employee.MvcClient.Models
         public decimal? Salary { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Please select a valid department ID.")]
+
+        // FK to Department
         public int DepartmentId { get; set; }
     }
 }

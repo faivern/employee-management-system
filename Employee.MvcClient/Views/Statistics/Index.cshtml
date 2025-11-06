@@ -1,0 +1,119 @@
+﻿@{
+	ViewData["Title"] = "Employee Statistics";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+	<h1>Employee Statistics</h1>
+	<div>
+		<a asp-controller="Employees" asp-action="Index" class="btn btn-secondary">Back to Management</a>
+	</div>
+</div>
+
+<hr />
+
+<h3>Overview</h3>
+<div class="row mb-4">
+	<div class="col-md-3">
+		<div class="card text-white bg-primary text-center shadow">
+			<div class="card-body">
+				<h5 class="card-title">Total Employees</h5>
+				<p class="fs-4 fw-bold">@ViewBag.TotalEmployees</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-3">
+		<div class="card text-white bg-info text-center shadow">
+			<div class="card-body">
+				<h5 class="card-title">Total Departments</h5>
+				<p class="fs-4 fw-bold">@ViewBag.TotalDepartments</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-3">
+		<div class="card text-white bg-success text-center shadow">
+			<div class="card-body">
+				<h5 class="card-title">Average Salary</h5>
+				<p class="fs-4 fw-bold">
+					@(((decimal)ViewBag.AverageSalary).ToString("C"))
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-3">
+		<div class="card text-white bg-warning text-center shadow">
+			<div class="card-body">
+				<h5 class="card-title text-dark">Median Salary</h5>
+				<p class="fs-4 fw-bold text-dark">@(((decimal)ViewBag.MedianSalary).ToString("C"))</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<h3 class="mt-4">Departments</h3>
+<div class="table-responsive">
+	<table class="table table-striped table-hover">
+		<thead class="table-dark">
+			<tr>
+				<th>Department ID</th>
+				<th>Department Name</th>
+				<th>Location</th>
+				<th>Employees</th>
+				<th>Average Salary</th>
+				<th>Total Salary Cost</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var dept in ViewBag.DepartmentStats)
+			{
+				<tr>
+					<td>@dept.DepartmentId</td>
+					<td>@dept.DepartmentName</td>
+					<td>@dept.DepartmentLocation</td>
+					<td>
+						<span class="badge bg-primary rounded-pill">@dept.EmployeeCount</span>
+					</td>
+					<td>@(((decimal)dept.AverageSalary).ToString("C"))</td>
+					<td>
+						<strong class="text-success">@(((decimal)dept.TotalSalaryCost).ToString("C"))</strong>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
+
+<h3 class="mt-4">Top Earners</h3>
+<div class="table-responsive">
+	<table class="table table-striped table-hover">
+		<thead class="table-dark">
+			<tr>
+				<th>Employee ID</th>
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Department</th>
+				<th>Salary (Monthly)</th>
+				<th>Salary (Yearly)</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var e in ViewBag.TopEarners)
+			{
+				<tr>
+					<td>@e.EmployeeId</td>
+					<td>@e.FirstName</td>
+					<td>@e.LastName</td>
+					<td>
+						<span class="badge bg-info">@e.DepartmentName</span>
+					</td>
+					<td>
+						<strong class="text-success">@(((decimal)e.Salary).ToString("C"))</strong>
+					</td>
+					<td>@(((decimal)e.YearlySalary).ToString("C"))</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>

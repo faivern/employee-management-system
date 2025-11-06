@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Employee>
+﻿@model IEnumerable<EmployeeViewModel>
 @using Employee.MvcClient.Models
 
 @{
@@ -8,7 +8,9 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
 	<h1>Employee Management System</h1>
 	<div>
-		<a asp-action="Logout" class="btn btn-danger">Logout</a>
+		<a asp-controller="Statistics" asp-action="Index" class="btn btn-info">
+			View statistics
+		</a>
 	</div>
 </div>
 
@@ -36,6 +38,8 @@
 						<th>Email</th>
 						<th>Salary (SEK)</th>
 						<th>Department ID</th>
+						<th>Department Name</th>
+						<th>Location</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -50,6 +54,8 @@
 								<td>@(employee.Email ?? "N/A")</td>
 								<td>@(employee.Salary?.ToString("C") ?? "N/A")</td>
 								<td>@employee.DepartmentId</td>
+								<td>@employee.Name</td>
+								<td>@employee.Location</td>
 							</tr>
 						}
 					}
