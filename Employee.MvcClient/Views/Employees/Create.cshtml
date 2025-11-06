@@ -1,5 +1,4 @@
-﻿@model IEnumerable<Employee>
-@using Employee.MvcClient.Models
+﻿@model Employee
 
 @{
     ViewData["Title"] = "Add new employee";
@@ -7,46 +6,60 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1>Add new Employee</h1>
     <div>
-        <a asp-action="Logout" class="btn btn-danger">Logout</a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
     </div>
 </div>
-
 
 <div class="container">
-    <div class="row">
-
-        <div class="table-responsive col-8">
-            <table class="table table-striped table-hover">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Employee ID</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                        <th>Salary (SEK)</th>
-                        <th>Department ID</th>
-                    </tr>
-                </thead>
-
-
-                </tbody>
-            </table>
+    <div class="row justify-content-center">
+   <div class="col-md-8">
+            <div class="card">
+  <div class="card-body">
+       <form asp-action="Create" method="post">
+     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+   
+         <div class="mb-3">
+              <label asp-for="FirstName" class="form-label"></label>
+         <input asp-for="FirstName" class="form-control" placeholder="Enter first name" />
+                 <span asp-validation-for="FirstName" class="text-danger"></span>
         </div>
 
-        <div class="col-4 mt-3">
-            <div class="mb-3">
-                <a asp-action="Create" class="btn btn-success w-25 p-2">Add new</a>
+    <div class="mb-3">
+      <label asp-for="LastName" class="form-label"></label>
+             <input asp-for="LastName" class="form-control" placeholder="Enter last name" />
+         <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
 
-            <div class="mb-3">
-                <a asp-action="Edit" class="btn btn-primary w-25 p-2">Edit</a>
-            </div>
+      <div class="mb-3">
+     <label asp-for="Email" class="form-label"></label>
+       <input asp-for="Email" class="form-control" placeholder="Enter email address" />
+             <span asp-validation-for="Email" class="text-danger"></span>
+          </div>
+
+        <div class="mb-3">
+ <label asp-for="Salary" class="form-label"></label>
+    <input asp-for="Salary" class="form-control" placeholder="Enter salary (1-200,000)" />
+  <span asp-validation-for="Salary" class="text-danger"></span>
+       </div>
 
             <div class="mb-3">
-                <a asp-action="Delete" class="btn btn-danger w-25 p-2">Delete</a>
-            </div>
+   <label asp-for="DepartmentId" class="form-label"></label>
+        <input asp-for="DepartmentId" class="form-control" placeholder="Enter department ID" />
+ <span asp-validation-for="DepartmentId" class="text-danger"></span>
+          </div>
+
+         <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-success">Create Employee</button>
+  <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+     </div>
+       </div>
         </div>
-
     </div>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
 

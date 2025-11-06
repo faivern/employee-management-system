@@ -45,11 +45,30 @@ namespace Employee.MvcClient.Services
             return employee;
         }
 
-
         // POST: api/Employees
         public async Task<bool> CreateAsync(Employee.MvcClient.Models.Employee employee)
         {
             var response = await _httpClient.PostAsJsonAsync("api/Employees", employee);
+            if(!response.IsSuccessStatusCode) {
+                return false;
+            }
+            return response.IsSuccessStatusCode;
+        }
+
+        // Edit: api/Employees/{id}
+        public async Task<bool> UpdateAsync(int EmployeeId, Employee.MvcClient.Models.Employee employee)
+        {
+            var response = await _httpClient.PutAsJsonAsync($"api/Employees/{EmployeeId}", employee);
+            if(!response.IsSuccessStatusCode) {
+                return false;
+            }
+            return response.IsSuccessStatusCode;
+        }
+
+        // DELETE: api/Employees/{id}
+        public async Task<bool> DeleteAsync(int EmployeeId)
+        {
+            var response = await _httpClient.DeleteAsync($"api/Employees/{EmployeeId}");
             if(!response.IsSuccessStatusCode) {
                 return false;
             }

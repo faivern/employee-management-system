@@ -30,7 +30,7 @@ namespace Employee.MvcClient.Controllers
 
             var employees = await _employeeApiService.GetAllAsync();
             return View(employees);
-            
+
         }
 
         // GET: Employees/Create
@@ -43,17 +43,43 @@ namespace Employee.MvcClient.Controllers
         // POST: Employees/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create(Employee.MvcClient.Models.Employee employee)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                return View(employee);
             }
-            catch
-            {
-                return View();
 
+            var created = await _employeeApiService.CreateAsync(employee);
+
+            if (!created)
+            {
+                ModelState.AddModelError(string.Empty, "Error creating employee.");
             }
-}
+
+            return RedirectToAction(nameof(Index));
         }
+
+        // GET: Employees/Edit/{id}
+        public async Task<IActionResult> Edit(int id)
+        {
+            var employee = await _employeeApiService.GetByIdAsync(id);
+            if (employee == null)
+            {
+                return NotFound();
+            }
+            return View(employee);
+        }
+
+        // GET: Employees/Delete/{id}
+        public async Task<IActionResult> Delete(int id)
+        {
+            var employee = await _employeeApiService.GetByIdAsync(id);
+            if (employee == null)
+            {
+                return NotFound();
+            }
+            return View(employee);
+        }
+    }
 }
