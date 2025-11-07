@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Employee.MvcClient.Models;
 using Employee.MvcClient.Services;
+using Microsoft.AspNetCore.Authorization; // skydda API
 
 namespace Employee.MvcClient.Controllers
 {
+    [Authorize]// skydda API
     public class EmployeesController : Controller
     {
         private readonly EmployeeApiService _employeeApiService;

@@ -2,9 +2,11 @@
 using Employee.MvcClient.Services;
 using System.Threading.Tasks;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization; // Skyddar API
 
 namespace Employee.MvcClient.Controllers
 {
+    [Authorize]
     public class StatisticsController : Controller
     {
         private readonly EmployeeApiService _employeeApiService;

@@ -1,4 +1,5 @@
 using Employee.MvcClient.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Employee.MvcClient
 {
@@ -9,7 +10,13 @@ namespace Employee.MvcClient
             var builder = WebApplication.CreateBuilder(args);
             var baseUrl = builder.Configuration["ApiSettings:BaseUrl"] ?? "https://localhost:7224/";
 
-            // Add services to the container.
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Account/Login";
+                    options.LogoutPath = "/Account/Logout";
+                });
+
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddHttpClient<EmployeeApiService>(client =>
@@ -26,11 +33,9 @@ namespace Employee.MvcClient
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -38,7 +43,7 @@ namespace Employee.MvcClient
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
