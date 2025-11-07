@@ -9,11 +9,9 @@ namespace EmployeeManager.Backend
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddControllers();
 
-            // Add CORS policy
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowMvcClient", policy =>
@@ -29,11 +27,9 @@ namespace EmployeeManager.Backend
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -42,12 +38,10 @@ namespace EmployeeManager.Backend
 
             app.UseRouting();
 
-            // Enable CORS
             app.UseCors("AllowMvcClient");
 
             app.UseAuthorization();
 
-            // Map API controllers
             app.MapControllers();
 
             app.MapControllerRoute(

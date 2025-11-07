@@ -39,11 +39,9 @@ namespace Employee.MvcClient.Controllers
                 employees = await _employeeApiService.GetAllAsync();
             }
 
-            // Fetch all departments
             var departments = await _departmentApiService.GetAllAsync();
             var departmentDict = departments.ToDictionary(d => d.DepartmentId);
 
-            // Create ViewModels combining employee and department data
             var employeeViewModels = employees.Select(e =>
             {
                 var department = departmentDict.GetValueOrDefault(e.DepartmentId);
@@ -105,10 +103,10 @@ namespace Employee.MvcClient.Controllers
             {
                 return NotFound();
             }
-            
+
             var departments = await _departmentApiService.GetAllAsync();
             var department = departments.FirstOrDefault(d => d.DepartmentId == employee.DepartmentId);
-            
+
             var viewModel = new EmployeeViewModel
             {
                 EmployeeId = employee.EmployeeId,
@@ -134,16 +132,14 @@ namespace Employee.MvcClient.Controllers
             {
                 var departments = await _departmentApiService.GetAllAsync();
                 ViewBag.Departments = departments;
-                
-                // Repopulate department info for display
+
                 var dept = departments.FirstOrDefault(d => d.DepartmentId == viewModel.DepartmentId);
                 viewModel.Name = dept?.Name ?? "N/A";
                 viewModel.Location = dept?.Location ?? "N/A";
-         
+
                 return View(viewModel);
             }
-  
-            // Map ViewModel back to Employee
+
             var employee = new Employee.MvcClient.Models.Employee
             {
                 EmployeeId = viewModel.EmployeeId,
@@ -153,22 +149,21 @@ namespace Employee.MvcClient.Controllers
                 Salary = viewModel.Salary,
                 DepartmentId = viewModel.DepartmentId
             };
-            
+
             var updated = await _employeeApiService.UpdateAsync(viewModel.EmployeeId, employee);
             if (!updated)
             {
                 ModelState.AddModelError(string.Empty, "Error updating employee.");
                 var departments = await _departmentApiService.GetAllAsync();
                 ViewBag.Departments = departments;
-        
-                // Repopulate department info for display
+
                 var dept = departments.FirstOrDefault(d => d.DepartmentId == viewModel.DepartmentId);
                 viewModel.Name = dept?.Name ?? "N/A";
                 viewModel.Location = dept?.Location ?? "N/A";
-         
+
                 return View(viewModel);
             }
-            
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -181,45 +176,45 @@ namespace Employee.MvcClient.Controllers
             {
                 return NotFound();
             }
-    
+
             var departments = await _departmentApiService.GetAllAsync();
             var department = departments.FirstOrDefault(d => d.DepartmentId == employee.DepartmentId);
-     
-            var viewModel = new EmployeeViewModel
- {
-     EmployeeId = employee.EmployeeId,
-FirstName = employee.FirstName,
-         LastName = employee.LastName,
-      Email = employee.Email,
-                Salary = employee.Salary,
-      DepartmentId = employee.DepartmentId,
-       Name = department?.Name ?? "N/A",
-       Location = department?.Location ?? "N/A"
-     };
 
-      return View(viewModel);
-     }
+            var viewModel = new EmployeeViewModel
+            {
+                EmployeeId = employee.EmployeeId,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Email = employee.Email,
+                Salary = employee.Salary,
+                DepartmentId = employee.DepartmentId,
+                Name = department?.Name ?? "N/A",
+                Location = department?.Location ?? "N/A"
+            };
+
+            return View(viewModel);
+        }
 
         // POST: Employees/Delete/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(EmployeeViewModel viewModel)
         {
-    var deleted = await _employeeApiService.DeleteAsync(viewModel.EmployeeId);
+            var deleted = await _employeeApiService.DeleteAsync(viewModel.EmployeeId);
 
             if (!deleted)
-      {
-       ModelState.AddModelError(string.Empty, "Error deleting employee.");
-                
-  var departments = await _departmentApiService.GetAllAsync();
-             var department = departments.FirstOrDefault(d => d.DepartmentId == viewModel.DepartmentId);
-              viewModel.Name = department?.Name ?? "N/A";
-            viewModel.Location = department?.Location ?? "N/A";
-      
-  return View(viewModel);
-         }
+            {
+                ModelState.AddModelError(string.Empty, "Error deleting employee.");
 
-        return RedirectToAction(nameof(Index));
+                var departments = await _departmentApiService.GetAllAsync();
+                var department = departments.FirstOrDefault(d => d.DepartmentId == viewModel.DepartmentId);
+                viewModel.Name = department?.Name ?? "N/A";
+                viewModel.Location = department?.Location ?? "N/A";
+
+                return View(viewModel);
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

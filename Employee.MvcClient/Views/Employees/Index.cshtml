@@ -127,7 +127,6 @@
 			const deleteButton = document.getElementById("deleteBtn");
 			const selectionWarning = document.getElementById("selectionWarning");
 
-			// Initially disable buttons
 			editButton.disabled = true;
 			deleteButton.disabled = true;
 
@@ -145,12 +144,10 @@
 					editButton.disabled = false;
 					deleteButton.disabled = false;
 					
-					// Hide warning message when row is selected
 					selectionWarning.style.display = 'none';
 				});
 			});
 
-			// Add form submission validation
 			editButton.closest('form').addEventListener('submit', function(e) {
 				if (!editIdInput.value) {
 					e.preventDefault();

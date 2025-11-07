@@ -37,7 +37,6 @@ namespace Employee.MvcClient.Controllers
 
             if (model.Username == adminUser && model.Password == adminPass)
             {
-                // Skapa claims (vilken användare är detta, ev. roll)
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, model.Username),
@@ -50,7 +49,6 @@ namespace Employee.MvcClient.Controllers
 
                 var principal = new ClaimsPrincipal(identity);
 
-                //  Skapa auth-cookie
                 await HttpContext.SignInAsync(
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     principal);

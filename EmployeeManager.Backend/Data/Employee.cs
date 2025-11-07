@@ -12,12 +12,15 @@ public partial class Employee
     public int EmployeeId { get; set; }
 
     [StringLength(50)]
+    [Required]
     public string FirstName { get; set; } = null!;
 
     [StringLength(50)]
+    [Required]
     public string LastName { get; set; } = null!;
 
     [StringLength(100)]
+    [EmailAddress]
     public string? Email { get; set; }
 
     [Column(TypeName = "decimal(20, 0)")]

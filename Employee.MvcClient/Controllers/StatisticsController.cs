@@ -2,7 +2,7 @@
 using Employee.MvcClient.Services;
 using System.Threading.Tasks;
 using System.Linq;
-using Microsoft.AspNetCore.Authorization; // Skyddar API
+using Microsoft.AspNetCore.Authorization;
 
 namespace Employee.MvcClient.Controllers
 {
@@ -20,16 +20,15 @@ namespace Employee.MvcClient.Controllers
 
         public async Task<IActionResult> Index()
         {
-            // Fetch all employees and departments from API
             var employees = await _employeeApiService.GetAllAsync();
             var departments = await _departmentApiService.GetAllAsync();
             var employeesWithSalary = employees.Where(e => e.Salary.HasValue).ToList();
 
-            // === BASIC STATISTICS ===
+            // BASIC STATISTICS
             var totalEmployees = employees.Count;
             var totalDepartments = departments.Count;
 
-            // === SALARY ANALYTICS ===
+            // SALARY ANALYTICS
             var averageSalary = employeesWithSalary.Any()
                 ? employeesWithSalary.Average(e => e.Salary!.Value)
                 : 0;
@@ -48,7 +47,7 @@ namespace Employee.MvcClient.Controllers
 
             var totalPayrollCost = employeesWithSalary.Sum(e => e.Salary!.Value);
 
-            // === DEPARTMENT ANALYTICS ===
+            // DEPARTMENT ANALYTICS
             var departmentStats = employees
                 .GroupBy(e => e.DepartmentId)
                 .Select(g => new
@@ -75,7 +74,7 @@ namespace Employee.MvcClient.Controllers
             var highestPayingDept = departmentStats.OrderByDescending(d => d.AverageSalary).FirstOrDefault();
             var lowestPayingDept = departmentStats.OrderBy(d => d.AverageSalary).FirstOrDefault();
 
-            // === TOP EARNERS ===
+            // TOP EARNERS
             var topEarners = employeesWithSalary
                 .OrderByDescending(e => e.Salary)
                 .Take(5)
@@ -90,7 +89,6 @@ namespace Employee.MvcClient.Controllers
                 })
                 .ToList();
 
-            // Pass all statistics to ViewBag
             ViewBag.TotalEmployees = totalEmployees;
             ViewBag.TotalDepartments = totalDepartments;
             ViewBag.AverageSalary = averageSalary;
@@ -109,7 +107,7 @@ namespace Employee.MvcClient.Controllers
             return View();
         }
 
-        // Helper method to calculate median
+        // calculates median
         private decimal CalculateMedian(List<decimal> values)
         {
             if (!values.Any()) return 0;
@@ -119,12 +117,10 @@ namespace Employee.MvcClient.Controllers
 
             if (count % 2 == 0)
             {
-                // Even number of elements - average of two middle values
                 return (sortedValues[count / 2 - 1] + sortedValues[count / 2]) / 2;
             }
             else
             {
-                // Odd number of elements - middle value
                 return sortedValues[count / 2];
             }
         }

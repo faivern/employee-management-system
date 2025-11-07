@@ -16,8 +16,8 @@ namespace Employee.MvcClient.Services
         // GET: api/Employees
         public async Task<List<Employee.MvcClient.Models.Employee>> GetAllAsync()
         {
-            var response =  await _httpClient.GetAsync("api/Employees");
-            if(!response.IsSuccessStatusCode)
+            var response = await _httpClient.GetAsync("api/Employees");
+            if (!response.IsSuccessStatusCode)
             {
                 return new List<Employee.MvcClient.Models.Employee>();
             }
@@ -31,8 +31,8 @@ namespace Employee.MvcClient.Services
         public async Task<Employee.MvcClient.Models.Employee?> GetByIdAsync(int EmployeeId)
         {
 
-            var response =  await _httpClient.GetAsync($"api/Employees/{EmployeeId}");
-            if(!response.IsSuccessStatusCode)
+            var response = await _httpClient.GetAsync($"api/Employees/{EmployeeId}");
+            if (!response.IsSuccessStatusCode)
             {
                 return null;
             }
@@ -48,7 +48,8 @@ namespace Employee.MvcClient.Services
         public async Task<bool> CreateAsync(Employee.MvcClient.Models.Employee employee)
         {
             var response = await _httpClient.PostAsJsonAsync("api/Employees", employee);
-            if(!response.IsSuccessStatusCode) {
+            if (!response.IsSuccessStatusCode)
+            {
                 return false;
             }
             return response.IsSuccessStatusCode;
@@ -59,7 +60,8 @@ namespace Employee.MvcClient.Services
         public async Task<bool> UpdateAsync(int EmployeeId, Employee.MvcClient.Models.Employee employee)
         {
             var response = await _httpClient.PutAsJsonAsync($"api/Employees/{EmployeeId}", employee);
-            if(!response.IsSuccessStatusCode) {
+            if (!response.IsSuccessStatusCode)
+            {
                 return false;
             }
             return response.IsSuccessStatusCode;
@@ -70,7 +72,8 @@ namespace Employee.MvcClient.Services
         public async Task<bool> DeleteAsync(int EmployeeId)
         {
             var response = await _httpClient.DeleteAsync($"api/Employees/{EmployeeId}");
-            if(!response.IsSuccessStatusCode) {
+            if (!response.IsSuccessStatusCode)
+            {
                 return false;
             }
             return response.IsSuccessStatusCode;

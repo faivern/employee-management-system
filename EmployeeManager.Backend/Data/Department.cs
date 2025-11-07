@@ -12,6 +12,7 @@ public partial class Department
     public int DepartmentId { get; set; }
 
     [StringLength(100)]
+    [Required]
     public string Name { get; set; } = null!;
 
     [StringLength(100)]
